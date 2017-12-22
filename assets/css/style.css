@@ -2,5 +2,32 @@
 	background-image: url("../images/bigtrain.jpg");
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
+	
+	
 
+}
+
+.box{
+	font-family: 'Paytone One', sans-serif;
+	color: #ffffff;
+
+	opacity: 0.8;
+	position:    relative;
+    bottom:      10px;
+    font-family: 'museo_slab500';
+    font-size:   150%;
+    color:       #fff;
+    padding:     10px 20px;
+    width:       50%;
+    line-height: 150%;
+    background:  rgb(0, 0, 0);
+    background:  rgba(5,4,2,0.4);
+    margin-left: 23%;
+	 /*margin: 20px;
+  background-color: #ffffff;
+  
+  opacity: 0.6;
+  width: 440px;
+  height: 140px;
+  margin-left: 300px;*/
 }

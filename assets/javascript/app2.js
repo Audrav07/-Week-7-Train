@@ -1,3 +1,7 @@
+
+
+
+
 var config = {
     apiKey: "AIzaSyBFe5pf-EIoVc2Q8DM1Bp07-k6wAY0FqTA",
     authDomain: "train-scheduler-bec06.firebaseapp.com",
@@ -11,47 +15,69 @@ var config = {
 //variables
   var database = firebase.database();
   var nextTrain = 0;
-  var tMinutesAway = 0;
+  var minutesAway = "";
   var trainID = [];
   var index = 0;
   var nameOfTrain = "";
-  var currentTime = moment();
-	console.log("current time: " + moment(currentTime).format("h:mm:ss a"));
+  
+  // var currentTime = moment().format('dddd, MMMM Do YYYY, h:mm:ss A');
+	// $('#current-status').html( currentTime);
 
+	var nextTrain = 0;
 
+  var nameOfTrain = "";
+  var destination = "";
+  var firstTrainTime = "";
+  var frequency = 0;
 
-var datetime = null,
-
+  var datetime = null,
 date = null;
 
 var update = function () {
   date = moment(new Date())
-  datetime.html(date.format('dddd, MMMM Do YYYY, h:mm:ss a'));
+  datetime.html(date.format('MMMM Do YYYY, h:mm:ss a'));
 };
 
+$(document).ready(function(){
+  datetime = $('#current-status')
+  update();
+  setInterval(update, 1000);
+});
+ 
+ 
 
 
-//add new train button/inputs data from user
-$("#addTrain").on("click", function(event){
-	event.preventDefault();
+// var datetime = null,
 
-	var nameOfTrain = $('#train-name').val().trim();
-	var destination = $('#destination').val().trim();
-	var firstTrainTime = $('#first-train').val().trim();
-	var frequency = $('#frequency').val().trim();
+// var date = null;
+
+// var update = function () {
+//   date = moment(new Date())
+//   datetime.html(date.format('dddd, MMMM Do YYYY, h:mm:ss A'));
+// };
 
 
 
 
 $(document).ready(function(){
- $('#refresh').on('click', function(){
+
+$('#refresh').on('click', function(){
 	location.reload();
 	console.log('clicked');
-})
-	dateTime = $('#current-status')
-	update();
-	setInterval(update, 1000);
+
+
+
+ 
 });
+
+//add new train button/inputs data from user
+$("#addTrain").on("click", function(event){
+	event.preventDefault();
+
+	 nameOfTrain = $('#train-name').val().trim();
+	destination = $('#destination').val().trim();
+	firstTrainTime = $('#first-train').val().trim();
+	 frequency = $('#frequency').val().trim();
 
 
 
@@ -81,6 +107,13 @@ $(document).ready(function(){
 
 
 });
+
+var updatedNextArrival = function(){
+		date = moment(new Date())
+		dateTime.html(date.format('hh:mm a'));
+
+			
+	}
 
 //create firebase event for adding a train to the database
 database.ref().orderByChild("dateAdded").limitToLast(20).on("child_added", function(childSnapshot){
@@ -173,7 +206,7 @@ database.ref().once('value', function(dataSnapshot){
 	console.log(trainID);
 
 
-
+});
 
 
 
