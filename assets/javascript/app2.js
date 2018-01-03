@@ -30,19 +30,27 @@ var config = {
   var firstTrainTime = "";
   var frequency = 0;
 
-  var datetime = null,
-date = null;
 
-var update = function () {
-  date = moment(new Date())
-  datetime.html(date.format('MMMM Do YYYY, h:mm:ss a'));
-};
+  setInterval(function(){
+    $('#current-status').html(moment().format('dddd MMMM E   GGGG, h:mm:ss A'))
+    
 
-$(document).ready(function(){
-  datetime = $('#current-status')
-  update();
-  setInterval(update, 1000);
-});
+  }, 1000);
+
+
+//   var datetime = null,
+// date = null;
+
+// var update = function () {
+//   date = moment(new Date())
+//   datetime.html(date.format('MMMM Do YYYY, h:mm:ss a'));
+// };
+
+// $(document).ready(function(){
+//   datetime = $('#current-status')
+//   update();
+//   setInterval(update, 1000);
+// });
  
  
 
@@ -108,12 +116,12 @@ $("#addTrain").on("click", function(event){
 
 });
 
-var updatedNextArrival = function(){
-		date = moment(new Date())
-		dateTime.html(date.format('hh:mm a'));
+// var updatedNextArrival = function(){
+// 		date = moment(new Date())
+// 		dateTime.html(date.format('hh:mm a'));
 
 			
-	}
+// 	}
 
 //create firebase event for adding a train to the database
 database.ref().orderByChild("dateAdded").limitToLast(20).on("child_added", function(childSnapshot){
@@ -178,10 +186,10 @@ console.log("Train name: " + childSnapshot.val().nameOfTrain);
 		+ "<td>" + childSnapshot.val().destination + "</td>" 
 		+ "<td>" + "Every " + childSnapshot.val().frequency + "  mins" + "</td>" 
 		+ "<td>" + nextArrival + "</td>" 
-		+ "<td>" + minutesAway + " mins until arrival" 
-		+ "<td><button class='delete btn btn-default btn-sm' data-index='" + index 
-		+ "</button> " + "</td>" +
-   		"<td>" + "<button type='button' class='btn btn-default btn-sm'>"  + "</button>" +
+		+ "<td>" + minutesAway + " mins until arrival" +
+		// + "<td><button class='delete btn btn-default btn-sm' data-index=' + index 
+		// + "</button> " + "</td>" +
+   		// "<td>" + "<button type='button' class='btn btn-default delete-btn'> <span class='glyphicon glyphicon-trash'</span>" + snapshot.key() + "</button>" + "</td>" +
 
 		"</td></tr>");
 
@@ -207,6 +215,43 @@ database.ref().once('value', function(dataSnapshot){
 
 
 });
+
+function deleteTrain(){
+	if(confirm("Are you sure you want to delete this train?")){
+		database.ref().child($(this).attr('id')).remove();
+		$(this).closest('tr').remove();
+	};
+}
+
+function editTrain(){
+
+var removeRow = $(this).parent().parent().index();
+var clickKey = $(this).attr('id');
+
+var query = database.ref().orderByKey();
+query.once("value")
+.then(function(snapshot){
+	var snapObject = snapshot.val();
+	snapshot.forEach(function(childSnapshot){
+		var key = childSnapshot.key;
+
+		var childData = childSnapshot.val();
+
+		if (key === clickKey){
+			$("#train-name").val(childData.name);
+			$("#destination").val(childData.destination);
+			$("#first-train").val(childData.firstTrainTime);
+			$("#frequency").val(childData.frequency);
+		}
+	});
+});
+
+database.ref().child($(this).attr('id')).remove();
+$(this).closest('tr').remove();
+}
+
+// $(document).on("click", ".edit-btn", editTrain);
+// $(document).on("click", ".delete-btn", deleteTrain);
 
 
 
